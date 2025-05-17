@@ -97,6 +97,29 @@ public class QuestionAndAnswerBulkUploadFileServiceImpl implements QuestionAndAn
         return uploadedFile.isPresent()?uploadedFile.get():null;
     }
 
+    @Override
+    public byte[] downloadBlankExcel() {
+        List<String> columns = List.of("Question", "Domain","Option1","Option2","Option3","Option4","Answer");
+        return getBlankExcel(columns);
+    }
+
+    private byte[] getBlankExcel(List<String> columns) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Question Answer Excel");
+        Row row = sheet.createRow(0);
+        for(int i=0; i<columns.size();i++){
+            Cell cell = row.createCell(i);
+            cell.setCellValue(columns.get(i));
+        };
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            workbook.write(byteArrayOutputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return byteArrayOutputStream.toByteArray();
+    }
+
     private void validateExcel(MultipartFile file){
         if(file==null){
             throw new QAppException("Invalid File Format. Please Upload A Valid Excel File");
