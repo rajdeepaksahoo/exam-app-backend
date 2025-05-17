@@ -1,5 +1,6 @@
 package com.online.exam.model;
 
+import com.online.exam.enums.Authorities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,9 @@ public class CustomAuthorities {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long authorityId;
-    private String authorityName="USER";
+    @Enumerated(EnumType.STRING)
+    @Column(name = "authority_name",columnDefinition = "enum('ADMIN','USER')")
+    private Authorities authorityName;
     @ManyToMany(mappedBy = "roles")
     private List<UserModel> userModels;
 

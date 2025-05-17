@@ -1,5 +1,6 @@
 package com.online.exam.service.impl;
 
+import com.online.exam.exception.QAppException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,21 @@ public class EmailService {
 //        helper.addAttachment(fileName, attachment);
         helper.addAttachment("examReport.pdf", new ByteArrayResource(pdfData)); // Adding the PDF as an attachment
         javaMailSender.send(mimeMessage);
+    }
+
+    public void sendOtp(String to, String subject, String text)  {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true); // true indicates multipart message
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(text);
+
+            javaMailSender.send(mimeMessage);
+        }catch (Exception e){
+            throw new QAppException(e.getMessage());
+        }
     }
 }
 
