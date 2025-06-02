@@ -1,8 +1,10 @@
 package com.online.exam.controller;
 
+import com.online.exam.dto.UserDto;
 import com.online.exam.exception.InvalidUsernameException;
 import com.online.exam.model.UserModel;
-import com.online.exam.service.impl.UserService;
+import com.online.exam.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity< Map<String,String>> registerUser (@RequestBody UserModel userModel){
-        if(userModel.getUsername().equals("") || userModel.getUsername().equals("")) throw new InvalidUsernameException("Username Or Password Should not be blank ");
+    public ResponseEntity< Map<String,String>> registerUser (@Valid @RequestBody UserDto userDto){
+        if(userDto.getUsername().equals("") || userDto.getUsername().equals("")) throw new InvalidUsernameException("Username Or Password Should not be blank ");
 
-        UserModel userModel1 = userService.registerUser(userModel);
+        UserModel userModel1 = userService.registerUser(userDto);
         Map<String,String> response = new HashMap<>();
-        response.put("STATUS",userModel1.getUserId()!=null ?userModel.getUsername()+" Registered Successfully":"Registration Failed");
+        response.put("STATUS",userModel1.getUserId()!=null ?userDto.getUsername()+" Registered Successfully":"Registration Failed");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     @GetMapping("/")
@@ -63,7 +65,6 @@ public class UserController {
     @GetMapping("/preFilter")
     @PreFilter("filterObject.contains('a')")
     public List<String> preFilter(@RequestBody List<String> strings){
-
         return strings;
     }
 }

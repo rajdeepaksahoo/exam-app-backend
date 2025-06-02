@@ -7,9 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
@@ -48,22 +45,10 @@ public class QuestionAndAnswerBulkUploadController {
                 .body(uploadedFile.getInvalidEntry());
     }
 
-//    @GetMapping("/getUploadedFile")
-//    public ResponseEntity<byte[]> downloadUploadedFile1(){
-//        QuestionAndAnswerBulkUploadResponse questionAndAnswerBulkUploadRequest  = new QuestionAndAnswerBulkUploadResponse();
-//        questionAndAnswerBulkUploadRequest.setOriginalFileUrl(3+"");
-//        UploadedFile uploadedFile = questionAndAnswerBulkUploadFileService.getUploadedFile(questionAndAnswerBulkUploadRequest); // fetch from DB
-//
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + uploadedFile.getFileName())
-//                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-//                .body(uploadedFile.getData());
-//    }
-
-//    @GetMapping("/getUploadedFileHistory")
-//    public ResponseEntity<List<QuestionAndAnswerBulkUploadResponse>> downloadUploadedFile1(){
-//
-//    }
+    @GetMapping("/downloadBlankExcel")
+    public ResponseEntity<byte[]> downloadBlankExcel(){
+        return new ResponseEntity<>(questionAndAnswerBulkUploadFileService.downloadBlankExcel(),HttpStatus.OK);
+    }
 }
 
 
